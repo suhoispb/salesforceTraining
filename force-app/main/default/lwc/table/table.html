@@ -1,0 +1,12 @@
+<template>
+  <lightning-card variant="Narrow"  title="Contact List" icon-name="standard:contact">
+    <c-search oncchange={updateKey}></c-search>
+    <div class="slds-m-around_small">
+      <lightning-datatable
+        key-field="Id"
+        data={contacts} 
+        columns={columns}>
+    </lightning-datatable>
+    </div>
+  </lightning-card>
+</template>
