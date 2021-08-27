@@ -1,6 +1,7 @@
 import { LightningElement, wire, track, api } from 'lwc';
 import getContactList from '@salesforce/apex/ContactController.getContactList';
-
+import { deleteRecord } from 'lightning/uiRecordApi';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 const columns = [
     { label: 'First Name', fieldName: 'FirstName' },
@@ -17,31 +18,62 @@ const columns = [
         day: '2-digit',
         hour: "2-digit",
         minute: "2-digit" }
-    }
+    },
+    { label: 'Delete', 
+    type: 'button-icon',
+    fixedWidth: 60,
+    typeAttributes: {
+        iconName: 'utility:delete',
+        name: 'delete_record', 
+        title: 'delete',
+        variant: 'border-filled',
+        alternativeText: 'delete',
+    } }
   ];
 
   
-
 export default class Table extends LightningElement {
     
     key='';
     error;
     columns = columns;
     @track contacts;
+    @track showModal = false;
+    @track showAddModal = false;
+    @track record = {};
 
     updateKey(event) {
       this.key = event.detail;
   }
-  
+
+    handleRowAction(event) {
+        this.record  = event.detail.row.Id;
+        this.showModal = true;
+    }
+    
+    addContact(event) {
+        this.showAddModal = true;
+        event.stopPropagation();
+    }
+    closeAddContactModal() {
+        this.showAddModal = false;
+    }
+    closeModal() {
+        this.showModal = false;
+    }
+
+    saveContact() {
+        
+    }
 
     @wire(getContactList, { searchKey: '$key'})
-    wiredContact({ error, data}) {
+    wiredContact({data, error}) {
         if (data) {
             let accountUrl;
             this.contacts = data.map(row => {
                 const clone = {...row, AccountName : row.Account.Name}
                 accountUrl = `/lightning/r/Account/${clone.AccountId}/view`;
-                return {...row, AccountName : row.Account.Name, accountUrl};
+                return {...clone, accountUrl};
             });
             this.error= undefined;
             
@@ -51,4 +83,33 @@ export default class Table extends LightningElement {
         }
        
     }
-}
+
+    deleteContact(){
+        console.log(this.record);
+            deleteRecord(this.record)
+                .then( r =>{
+                    this.dispatchEvent(
+                        new ShowToastEvent({
+                            title: 'Success',
+                            message: 'Contact deleted',
+                            variant: 'success'
+                        })
+                    );
+                    return refreshApex(this.wiredContact);
+            }).catch(error => {
+                    this.dispatchEvent(
+                        new ShowToastEvent({
+                            title: 'Error deleting record',
+                            message: error.body.message,
+                            variant: 'error'
+                        })
+                    );
+            }); 
+                this.showModal = false;
+        }
+    }
+
+
+
+
+    

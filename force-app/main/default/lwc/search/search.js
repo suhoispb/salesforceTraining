@@ -6,6 +6,10 @@ class Search extends LightningElement {
             detail: this.template.querySelector('lightning-input').value 
         }));
       }
+      addContact(event) {
+        this.dispatchEvent(new CustomEvent("click"));
+        event.stopPropagation();
+      }
 };
 
 export default Search;
