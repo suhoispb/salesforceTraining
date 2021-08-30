@@ -1,0 +1,77 @@
+<template>
+  <template if:true={showAddModal}>
+    <section
+      role="dialog"
+      tabindex="-1"
+      aria-labelledby="modal-heading-01"
+      aria-modal="true"
+      aria-describedby="modal-content-id-1"
+      class="slds-modal slds-fade-in-open">
+      <div class="slds-modal__container">
+        <!-- modal header start -->
+        <header class="slds-modal__header">
+          <button class="slds-button slds-button_icon
+                         slds-modal__close
+                         slds-button_icon-inverse"
+            title="Close"
+            onclick={closeAddContactModal}>
+            <lightning-icon
+              icon-name="utility:close"
+              alternative-text="close"
+              variant="inverse"
+              size="small"
+            ></lightning-icon>
+          </button>
+          <h2
+            id="modal-heading-02"
+            class="slds-text-heading_medium slds-hyphenate">
+            Add new Contact
+          </h2>
+        </header>
+        <!-- modal body start -->
+        <div
+          class="slds-modal__content slds-p-around_medium"
+          id="modal-content-id-2">
+          <lightning-record-edit-form
+            record-id="contact.Id"
+            object-api-name="Contact">
+            <lightning-input-field
+              class="phoneInput"
+              field-name="MobilePhone"
+              type="phone">
+            </lightning-input-field>
+            <lightning-input-field class="accountInput" field-name="AccountId">
+            </lightning-input-field>
+            <lightning-input-field class="fNameInput" field-name="FirstName">
+            </lightning-input-field>
+            <lightning-input-field class="lNameInput" field-name="LastName">
+            </lightning-input-field>
+            <lightning-input-field
+              class="emailInput"
+              field-name="Email"
+              type="email">
+            </lightning-input-field>
+          </lightning-record-edit-form>
+        </div>
+        <!-- modal footer start-->
+        <footer class="slds-modal__footer">
+          <lightning-button
+            variant="destructive"
+            label="Cancel"
+            title="Cancel"
+            onclick={closeAddContactModal}
+            class="slds-m-right_large"
+          ></lightning-button>
+          <lightning-button
+            variant="brand"
+            label="Save"
+            title="Save"
+            onclick={saveContact}
+            class="slds-m-right_large"
+          ></lightning-button>
+        </footer>
+      </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+  </template>
+</template>
