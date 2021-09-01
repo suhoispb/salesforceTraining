@@ -1,0 +1,17 @@
+<template>
+    <lightning-card
+    variant="Narrow"
+    title="Lead List"
+    icon-name="standard:lead">
+    <div class="slds-m-around_small">
+      <lightning-datatable
+        suppress-bottom-bar="false"
+        hide-checkbox-column="false"
+        key-field="Id"
+        data={leads}
+        columns={columns}
+        oncellchange={handleSave}>
+      </lightning-datatable>
+    </div>
+  </lightning-card>
+</template>

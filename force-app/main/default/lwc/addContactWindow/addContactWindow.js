@@ -19,7 +19,7 @@ export default class AddContactWindow extends LightningElement {
 
     let objRecordInput = { apiName: "Contact", fields };
     createRecord(objRecordInput)
-      .then((contact) => {
+      .then((con) => {
         this.dispatchEvent(
           new ShowToastEvent({
             title: "Success",
