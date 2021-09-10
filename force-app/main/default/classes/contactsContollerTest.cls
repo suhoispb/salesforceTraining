@@ -9,4 +9,3 @@ public with sharing class contactsContollerTest {
       }
 }
 
-//сделал запрос и пришел ответ, либо сделал запрос, но ничего не пришло.

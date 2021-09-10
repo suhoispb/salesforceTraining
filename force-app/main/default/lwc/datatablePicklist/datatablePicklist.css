@@ -1,0 +1,17 @@
+[lightning-combobox_combobox-host]{
+    margin-bottom: 17px;
+}
+
+th.slds-has-focus, td.slds-has-focus{
+    box-shadow: none !important;
+}
+
+.slds-table_edit thead th:first-child{
+    width: 60px;
+} 
+
+.picklist-container{
+    margin-top: -2.25rem;
+    position: absolute !important;
+    width: auto;      
+}
