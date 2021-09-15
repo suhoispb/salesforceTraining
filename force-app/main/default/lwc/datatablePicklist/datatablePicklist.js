@@ -1,4 +1,4 @@
-import { LightningElement, api } from 'lwc';
+import { LightningElement, api, wire } from 'lwc';
 
 export default class DatatablePicklist extends LightningElement {
     @api label;
@@ -7,6 +7,11 @@ export default class DatatablePicklist extends LightningElement {
     @api value;
     @api context;
 
+    showPicklist=false;
+
+    showPickistHandler() {
+        this.showPicklist = true;
+    }
     handleChange(event) {
         this.value = event.detail.value;
         this.dispatchEvent(new CustomEvent('picklistchanged', {
@@ -17,5 +22,7 @@ export default class DatatablePicklist extends LightningElement {
                 data: { context: this.context, value: this.value }
             }
         }));
+        this.showPicklist = false;
     }
+
 }

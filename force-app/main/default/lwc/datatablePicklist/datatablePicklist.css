@@ -15,3 +15,22 @@ th.slds-has-focus, td.slds-has-focus{
     position: absolute !important;
     width: auto;      
 }
+
+.buttonEdit {
+    position: absolute;
+    right: 0;
+    top: 0.8em;
+    flex-shrink: 0;
+    visibility: hidden;
+}
+
+lightning-primitive-custom-cell:hover > .buttonEdit {
+    visibility: visible;
+} 
+/* tr td:hover >.buttonEdit {
+    visibility: visible;
+} 
+> c-datatable-picklist > div:nth-child(2)*/
+
+
+

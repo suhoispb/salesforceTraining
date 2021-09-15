@@ -1,8 +1,27 @@
 <template>
-    <div class="picklist-container">
-        <lightning-combobox name="picklist" label={label} value={value} 
-                            placeholder={placeholder} options={options}
-                            onchange={handleChange}>
-        </lightning-combobox>
-    </div>
+        <template if:true={showPicklist}>
+            <div class="picklist-container">
+                <lightning-combobox name="picklist" 
+                                    label={label} 
+                                    value={value} 
+                                    placeholder={placeholder} 
+                                    options={options}
+                                    onchange={handleChange}>
+                </lightning-combobox>
+            </div>
+        </template>
+        <template if:false={showPicklist} >
+            <div class="value">
+                {value}
+            </div>
+            <div>
+                <lightning-button-icon icon-name="utility:edit"  
+                                   alternative-text="Edit"
+                                   title="Edit"
+                                   variant="bare"
+                                   class="slds-m-left_x-small buttonEdit"
+                                   onclick={showPickistHandler}>
+            </lightning-button-icon>
+            </div>
+        </template>
 </template>

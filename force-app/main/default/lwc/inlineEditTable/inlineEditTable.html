@@ -1,26 +1,26 @@
 <template>
-    <lightning-card
-    variant="Narrow"
-    title="Account List"
-    icon-name="standard:account">
-    <div class="slds-m-around_small">
-      <c-custom-data-table
-        key-field="Id"
-        data={accounts}
-        columns={columns}
-        onpicklistchanged={picklistChanged}
-        onvalueselect={handleSelection}
-        onrowaction={handleRowAction}
-        onsave={handleSave}
-        draft-values={draftValues}
-        hide-checkbox-column="false">
-      </c-custom-data-table>
-    </div>
-  </lightning-card>
-  <c-delete-contact-window
-    onclosemodal={closeModal}
-    show-modal={showModal}
-    record={record}
-    onrefreshapex={refreshApex}>
-  </c-delete-contact-window>
+    <lightning-card variant="Narrow"
+                    title="Account List"
+                    icon-name="standard:account">
+      <div class="slds-m-around_small">
+        <c-custom-data-table 
+              key-field="Id" 
+              data={accounts} 
+              columns={columns}
+              onpicklistchanged={picklistChanged}
+              draft-values={draftValues}
+              oncellchange={handleCellChange} 
+              onsave={handleSave}
+              oncancel={handleCancel}
+              onrowaction={handleRowAction}
+              hide-checkbox-column="false">
+          </c-custom-data-table>
+      </div>
+    </lightning-card>
+    <c-delete-contact-window
+      onclosemodal={closeModal}
+      show-modal={showModal}
+      record={record}
+      onrefreshapex={refreshApex}>
+    </c-delete-contact-window>
 </template>
