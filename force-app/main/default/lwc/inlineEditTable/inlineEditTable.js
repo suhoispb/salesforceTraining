@@ -29,6 +29,7 @@ const columns = [
 
 export default class InlineEditTable extends LightningElement {
     columns = columns;
+    accounts;
     @track accounts;
 
     @track showModal = false;
@@ -36,13 +37,7 @@ export default class InlineEditTable extends LightningElement {
     @track wiredAccontList = [];
 
     draftValues=[];
-    value;
-    context;
-    showPicklist = false;
-    updateDrafts;
     lastSavedData=[];
-    acitveFieldId;
-
     
     updateDataValues(updateItem) {
         let copyData = [... this.accounts];
@@ -74,36 +69,20 @@ export default class InlineEditTable extends LightningElement {
     }
 
     handleCancel(event) {
-        this.accounts = this.lastSavedData;
-        this.draftValues =[];
+        this.template.querySelector('c-custom-data-table').draftValues = [];
     }
 
     updateDraftValues(updateItem) {
         let draftValueChanged = false;
         let copyDraftValues = [...this.draftValues];
         copyDraftValues.forEach(item => {
-            // сравнивается id аккаунта которое пришло с сервера,
-            // с id которое пришло с кастомной таблицы
             if (item.Id === updateItem.Id) {
-                console.log('item.Id:', item.Id)
-                console.log('updateItem.Id:', updateItem.Id)
                 for (let field in updateItem) {
-                    // field - то поле которое мы изменяем
-                    // unpdateItem - объект который пришел с 
-                    // onpicklistchange
-                    // item[field] - поле Account
-                    // updateItem[field] - тоже поле Account
                     item[field] = updateItem[field];
-                    console.log('field:', field)
-                    console.log('updateItem:', updateItem)
-                    console.log('item[field]:', item[field])
-                    console.log('updateItem[field]:', updateItem[field])
                 }
                 draftValueChanged = true;
-                
             }             
         });
-        console.log('copyDraftValues', copyDraftValues);
         if (draftValueChanged) {
             this.draftValues = [...copyDraftValues];
         } else {
@@ -115,7 +94,7 @@ export default class InlineEditTable extends LightningElement {
         event.stopPropagation();
         let {context, value} = event.detail.data;
         let updatedItem = { Id: context, Rating: value };
-        this.updateDraftValues(updatedItem);
+        this.updateDraftValues(updatedItem);               
     }
 
     handleCellChange(event) {
@@ -167,9 +146,8 @@ export default class InlineEditTable extends LightningElement {
     this.wiredAccontList = result;
     if (data) {
       this.accounts = data;
-      this.lastSavedData = data;
+      this.lastSavedData = this.accounts;
       this.error = undefined;
-      console.log(this.accounts)
     } else if (error) {
       this.error = error;
       this.accounts = undefined;
