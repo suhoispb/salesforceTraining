@@ -28,8 +28,8 @@ const columns = [
   ];
 
 export default class InlineEditTable extends LightningElement {
+
     columns = columns;
-    accounts;
     @track accounts;
 
     @track showModal = false;
@@ -37,56 +37,27 @@ export default class InlineEditTable extends LightningElement {
     @track wiredAccontList = [];
 
     draftValues=[];
-    lastSavedData=[];
-    
-    updateDataValues(updateItem) {
-        let copyData = [... this.accounts];
-        copyData.map(item => {
-            if (item.Id === updateItem.Id) {
-                updateRecord(updateItem).then(() => {
-                    this.dispatchEvent(
-                        new ShowToastEvent({
-                            title: 'Success',
-                            message: 'Contact updated',
-                            variant: 'success'
-                        })
-                    );
-                    return refreshApex(this.wiredAccontList).then(() => {
-                        this.draftValues =[];
-                    }); 
-                }).catch(error => {
-                    this.dispatchEvent(
-                        new ShowToastEvent({
-                            title: 'Error updating or reloading record',
-                            message: error.body.message,
-                            variant: 'error'
-                        })
-                    );
-                })
-                }
-            }
-        );
-    }
-
-    handleCancel(event) {
-        this.template.querySelector('c-custom-data-table').draftValues = [];
-    }
 
     updateDraftValues(updateItem) {
         let draftValueChanged = false;
         let copyDraftValues = [...this.draftValues];
+
         copyDraftValues.forEach(item => {
             if (item.Id === updateItem.Id) {
                 for (let field in updateItem) {
                     item[field] = updateItem[field];
                 }
                 draftValueChanged = true;
-            }             
+            }       
+            console.log('copyDraft after ForEach:', copyDraftValues)      
         });
         if (draftValueChanged) {
             this.draftValues = [...copyDraftValues];
+            console.log('if draftValueChanged=true:', this.draftValues)
+            
         } else {
             this.draftValues = [...copyDraftValues, updateItem];
+            console.log('if draftValueChanged=false:', this.draftValues)
         }
     }
 
@@ -94,11 +65,7 @@ export default class InlineEditTable extends LightningElement {
         event.stopPropagation();
         let {context, value} = event.detail.data;
         let updatedItem = { Id: context, Rating: value };
-        this.updateDraftValues(updatedItem);               
-    }
-
-    handleCellChange(event) {
-        this.updateDraftValues(event.detail.draftValues[0]);
+        this.updateDraftValues(updatedItem);      
     }
 
     closeModal() {
@@ -111,7 +78,9 @@ export default class InlineEditTable extends LightningElement {
         this.record = event.detail.row.Id;
         this.showModal = true;
     }
+
     handleSave(event) {
+        console.log('event detail drafts:', event.detail.draftValues)
         const recordInputs =  JSON.parse(JSON.stringify(event.detail.draftValues)).slice().map(draft => {
             const fields = Object.assign({}, draft);
             return { fields };
@@ -140,13 +109,25 @@ export default class InlineEditTable extends LightningElement {
         ); 
     }
 
+    handleCancel(event) {
+        console.log('cancel draftValues:', this.draftValues)
+        console.log('accounts:', this.accounts)
+        return refreshApex(this.wiredAccontList).then(() => {
+            this.draftValues =[];
+            console.log('drafts',this.draftValues)
+        }); 
+    }
+
+    // handleCellChange(event) {
+    //     this.updateDraftValues(event.detail.draftValues[0]);
+    // }
+
     @wire(getListOfAccounts)
     wiredAccount(result) {
     const { data, error } = result;
     this.wiredAccontList = result;
     if (data) {
       this.accounts = data;
-      this.lastSavedData = this.accounts;
       this.error = undefined;
     } else if (error) {
       this.error = error;
