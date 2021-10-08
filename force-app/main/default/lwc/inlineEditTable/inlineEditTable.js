@@ -1,8 +1,11 @@
 import { LightningElement, track, wire } from 'lwc';
+
 import getListOfAccounts from "@salesforce/apex/accountController.getListOfAccounts";
+
 import { refreshApex } from "@salesforce/apex";
 import { updateRecord } from 'lightning/uiRecordApi';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+
 
 const columns = [
     { label: "Name", fieldName: "Name", editable: true},
@@ -36,7 +39,22 @@ export default class InlineEditTable extends LightningElement {
     @track record = {};
     @track wiredAccontList = [];
 
-    draftValues=[];
+    @track draftValues=[];
+
+    lastSavedData=[];
+
+
+    updateDataValues(updateItem) {
+        let copyData = JSON.parse(JSON.stringify(this.accounts));
+        copyData.forEach((item) => {
+            if (item.Id === updateItem.Id) {
+                for (let field in updateItem) {
+                    item[field] = updateItem[field];
+                }
+            }
+        });
+        this.accounts = [...copyData];
+    }
 
     updateDraftValues(updateItem) {
         let draftValueChanged = false;
@@ -65,7 +83,9 @@ export default class InlineEditTable extends LightningElement {
         event.stopPropagation();
         let {context, value} = event.detail.data;
         let updatedItem = { Id: context, Rating: value };
-        this.updateDraftValues(updatedItem);      
+        console.log('updatedItem:', updatedItem)
+        this.updateDraftValues(updatedItem);    
+        this.updateDataValues(updatedItem);
     }
 
     closeModal() {
@@ -111,16 +131,12 @@ export default class InlineEditTable extends LightningElement {
 
     handleCancel(event) {
         console.log('cancel draftValues:', this.draftValues)
-        console.log('accounts:', this.accounts)
-        return refreshApex(this.wiredAccontList).then(() => {
-            this.draftValues =[];
-            console.log('drafts',this.draftValues)
-        }); 
+        console.log('accounts:', this.accounts);
+        event.preventDefault();
+        this.accounts = JSON.parse(JSON.stringify(this.lastSavedData));
+        this.draftValues = [];
+        console.log('drafts',this.draftValues)
     }
-
-    // handleCellChange(event) {
-    //     this.updateDraftValues(event.detail.draftValues[0]);
-    // }
 
     @wire(getListOfAccounts)
     wiredAccount(result) {
@@ -133,6 +149,7 @@ export default class InlineEditTable extends LightningElement {
       this.error = error;
       this.accounts = undefined;
         }
+    this.lastSavedData = this.accounts; 
     }
 
 }

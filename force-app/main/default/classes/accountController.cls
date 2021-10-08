@@ -5,5 +5,4 @@ public with sharing class accountController {
     accList=[ SELECT Id, Name, Rating FROM Account LIMIT 10 ];
       return accList;
   }
-
- 
+}
