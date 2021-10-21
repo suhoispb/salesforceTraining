@@ -19,7 +19,7 @@
                     <tr class="slds-hint-parent" key = {rec.key}>
                         <td data-label="Name"  style="width: 40%; ">
                             <div title="Name">
-                                <template if:false={isEdited}>
+                                <template if:false={isNameEdited}>
                                     {rec.Name}
                                     <lightning-button-icon icon-name="utility:edit"  
                                                            alternative-text="Edit"
@@ -27,10 +27,10 @@
                                                            variant="bare"
                                                            class="buttonEdit"
                                                            style="float: right;"
-                                                           onclick={inlineEditingHandler}>
+                                                           onclick={inlineEditingNameHandler}>
                                     </lightning-button-icon>
                                 </template>
-                                <template if:true={isEdited}>
+                                <template if:true={isNameEdited}>
                                     <lightning-input type="text" 
                                                      label="Name"
                                                      name="input1"
@@ -44,15 +44,27 @@
                             </div>
                         </td>
                         <td data-label="Rating" style="width: 20%;">
-                                {rec.Rating}
-                                <lightning-button-icon icon-name="utility:edit"  
-                                                       alternative-text="Edit"
-                                                       title="Edit"
-                                                       variant="bare"
-                                                       class="buttonEdit"
-                                                       style="float: right;"
-                                                       onclick={inlineEditingHandler}>
-                                </lightning-button-icon>
+                            <div title="Rating">
+                                <template if:false={isRatingEdited}>
+                                    {rec.Rating}
+                                    <lightning-button-icon icon-name="utility:edit"  
+                                                           alternative-text="Edit"
+                                                           title="Edit"
+                                                           variant="bare"
+                                                           class="buttonEdit"
+                                                           style="float: right;"
+                                                           onclick={inlineEditingRatingHandler}>
+                                    </lightning-button-icon>
+                                </template>
+                                <template if:true={isRatingEdited}>
+                                    <select class="slds-select" id={rec.Id}>
+                                        <option value="Hot">Hot</option>
+                                        <option value="Warm">Warm</option>
+                                        <option value="Cold">Cold</option>
+                                        <option value="">--None--</option>
+                                      </select>
+                                </template>
+                            </div>
                         </td>
                         <td data-label="Delete" style="width: 10%;">
                             <div class="slds-truncate">

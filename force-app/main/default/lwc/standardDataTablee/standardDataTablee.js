@@ -10,7 +10,8 @@ export default class StandardDataTable extends LightningElement {
 
     @track records = [];
 
-    isEdited = false;
+    isNameEdited = false;
+    isRatingEdited = false;
     showFooter = false;
 
     draftValues =[];
@@ -53,14 +54,17 @@ export default class StandardDataTable extends LightningElement {
         this.showFooter = true;
     }
 
-    inlineEditingHandler(event) {
-        this.isEdited = true;
+    inlineEditingNameHandler(event) {
+        this.isNameEdited = true;
+    }
+    inlineEditingRatingHandler(event) {
+        this.isRatingEdited = true;
     }
     onCancel(event) {
         event.preventDefault();
         this.records = JSON.parse(JSON.stringify(this.lastSavedData));
         this.showFooter = false;
-        this.isEdited = false;
+        this.isNameEdited = false;
     }
     onSave(event) {
         saveAccountsLwc({records : this.records})
@@ -74,7 +78,7 @@ export default class StandardDataTable extends LightningElement {
                 }),
             )
             return refreshApex(this.wiredAccontList).then(() => {
-                        this.isEdited = false;
+                        this.isNameEdited = false;
                         this.showFooter = false;
                     }); 
         })
