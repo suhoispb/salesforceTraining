@@ -1,4 +1,4 @@
-import { LightningElement, api, wire } from 'lwc';
+import { LightningElement, api } from 'lwc';
 
 export default class DatatablePicklist extends LightningElement {
     @api label;
@@ -6,6 +6,11 @@ export default class DatatablePicklist extends LightningElement {
     @api options;
     @api value;
     @api context;
+
+    @api editing;
+    checkEditing() {
+        console.log('edit:', this.editing)
+    }
 
     showPicklist=false;
 
@@ -23,6 +28,8 @@ export default class DatatablePicklist extends LightningElement {
             }
         }));
         this.showPicklist = false;
+        console.log('picklistEvent:', event.detail)
+        console.log('handleEditing:', this.editing)
     }
 
 }

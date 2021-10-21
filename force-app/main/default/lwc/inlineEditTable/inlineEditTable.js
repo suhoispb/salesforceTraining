@@ -43,6 +43,8 @@ export default class InlineEditTable extends LightningElement {
 
     lastSavedData=[];
 
+    editing = true;
+
 
     updateDataValues(updateItem) {
         let copyData = JSON.parse(JSON.stringify(this.accounts));
@@ -54,6 +56,7 @@ export default class InlineEditTable extends LightningElement {
             }
         });
         this.accounts = [...copyData];
+        console.log('updated acc:', this.accounts)
     }
 
     updateDraftValues(updateItem) {
@@ -83,6 +86,11 @@ export default class InlineEditTable extends LightningElement {
         event.stopPropagation();
         let {context, value} = event.detail.data;
         let updatedItem = { Id: context, Rating: value };
+        if(updatedItem) {
+            this.editing = false;
+        } else {
+            this.editing = true;
+        }
         console.log('updatedItem:', updatedItem)
         this.updateDraftValues(updatedItem);    
         this.updateDataValues(updatedItem);
@@ -103,6 +111,7 @@ export default class InlineEditTable extends LightningElement {
         console.log('event detail drafts:', event.detail.draftValues)
         const recordInputs =  JSON.parse(JSON.stringify(event.detail.draftValues)).slice().map(draft => {
             const fields = Object.assign({}, draft);
+            console.log('fields:', fields)
             return { fields };
         });
         recordInputs.map(recordInput => updateRecord(recordInput).then(() => {

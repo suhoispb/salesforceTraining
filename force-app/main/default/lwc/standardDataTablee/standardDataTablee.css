@@ -1,0 +1,7 @@
+.buttonEdit {
+    visibility: hidden;
+}
+
+td:hover .buttonEdit {
+    visibility: visible;
+}

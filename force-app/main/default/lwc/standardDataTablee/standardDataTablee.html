@@ -1,0 +1,84 @@
+<template>
+    <div class="slds-box slds-theme--default">
+        <table class="slds-table slds-table_cell-buffer slds-table_bordered ">
+            <thead>
+                <tr class="slds-line-height_reset">
+                    <th class="" scope="col">
+                        Name
+                    </th>
+                    <th class="" scope="col">
+                        Rating
+                    </th>
+                    <th class="" scope="col">
+                        Delete
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <template for:each={records} for:item = "rec">
+                    <tr class="slds-hint-parent" key = {rec.key}>
+                        <td data-label="Name"  style="width: 40%; ">
+                            <div title="Name">
+                                <template if:false={isEdited}>
+                                    {rec.Name}
+                                    <lightning-button-icon icon-name="utility:edit"  
+                                                           alternative-text="Edit"
+                                                           title="Edit"
+                                                           variant="bare"
+                                                           class="buttonEdit"
+                                                           style="float: right;"
+                                                           onclick={inlineEditingHandler}>
+                                    </lightning-button-icon>
+                                </template>
+                                <template if:true={isEdited}>
+                                    <lightning-input type="text" 
+                                                     label="Name"
+                                                     name="input1"
+                                                     variant="label-hidden" 
+                                                     value={rec.Name} 
+                                                     onchange={handleNameChange}
+                                                     key={rec.key}
+                                                     data-id={rec.Id}>
+                                    </lightning-input>
+                                </template>
+                            </div>
+                        </td>
+                        <td data-label="Rating" style="width: 20%;">
+                                {rec.Rating}
+                                <lightning-button-icon icon-name="utility:edit"  
+                                                       alternative-text="Edit"
+                                                       title="Edit"
+                                                       variant="bare"
+                                                       class="buttonEdit"
+                                                       style="float: right;"
+                                                       onclick={inlineEditingHandler}>
+                                </lightning-button-icon>
+                        </td>
+                        <td data-label="Delete" style="width: 10%;">
+                            <div class="slds-truncate">
+                                <lightning-button-icon icon-name="utility:delete"  
+                                                       alternative-text="Delete"
+                                                       title="Delete"
+                                                       variant="border-filled"
+                                                       class="slds-m-left_x-small buttonDelete"
+                                                       onclick={deleteRecHandler}>
+                                </lightning-button-icon>
+                            </div>
+                        </td>
+                        <!-- <td>
+                            <select data-val="hot">
+                                <option>hot</option><option>cold</option><option>warm</option>
+                            </select>
+                        </td> -->
+                    </tr>
+                </template>
+                <template if:true={showFooter}>
+                    <div class="footer">
+                        <button type="button" class="slds-button slds-button_neutral" onclick={onCancel}>Cancel</button>
+                        <button type="button" class="slds-button slds-button_brand" onclick={onSave}>Save</button>
+                    </div>
+                </template>
+            </tbody>
+        </table>
+    </div>
+</template>
