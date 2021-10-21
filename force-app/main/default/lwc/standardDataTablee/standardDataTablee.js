@@ -56,8 +56,11 @@ export default class StandardDataTable extends LightningElement {
     inlineEditingHandler(event) {
         this.isEdited = true;
     }
-    onCancel() {
+    onCancel(event) {
+        event.preventDefault();
+        this.records = JSON.parse(JSON.stringify(this.lastSavedData));
         this.showFooter = false;
+        this.isEdited = false;
     }
     onSave(event) {
         saveAccountsLwc({records : this.records})
