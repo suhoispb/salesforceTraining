@@ -57,7 +57,8 @@
                                     </lightning-button-icon>
                                 </template>
                                 <template if:true={isRatingEdited}>
-                                    <select class="slds-select" id={rec.Id}>
+                                    <select class="slds-select" id={rec.Id} value={rec.Rating} onchange={handleRatingChange}>
+                                        <option value={rec.Rating}>{rec.Rating}</option>
                                         <option value="Hot">Hot</option>
                                         <option value="Warm">Warm</option>
                                         <option value="Cold">Cold</option>
@@ -67,21 +68,16 @@
                             </div>
                         </td>
                         <td data-label="Delete" style="width: 10%;">
-                            <div class="slds-truncate">
+                            <a data-id={rec.Id} onclick={deleteRecHandler}>
                                 <lightning-button-icon icon-name="utility:delete"  
                                                        alternative-text="Delete"
                                                        title="Delete"
                                                        variant="border-filled"
                                                        class="slds-m-left_x-small buttonDelete"
-                                                       onclick={deleteRecHandler}>
+                                                       >
                                 </lightning-button-icon>
-                            </div>
+                            </a>
                         </td>
-                        <!-- <td>
-                            <select data-val="hot">
-                                <option>hot</option><option>cold</option><option>warm</option>
-                            </select>
-                        </td> -->
                     </tr>
                 </template>
                 <template if:true={showFooter}>
@@ -93,4 +89,10 @@
             </tbody>
         </table>
     </div>
+    <c-delete-contact-window
+      onclosemodal={closeModal}
+      show-modal={showModal}
+      record={record}
+      onrefreshapex={refreshApex}>
+    </c-delete-contact-window>
 </template>

@@ -2,6 +2,7 @@ import { LightningElement, wire, track } from 'lwc';
 
 import getAccounts from '@salesforce/apex/dynamicRowsController.getAccounts';
 import saveAccountsLwc from '@salesforce/apex/dynamicRowsController.saveAccountsLwc';
+// import deleteAccounts from '@salesforce/apex/dynamicRowsController.saveAccountsLwc';
 
 import { refreshApex } from "@salesforce/apex";
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
@@ -14,11 +15,11 @@ export default class StandardDataTable extends LightningElement {
     isRatingEdited = false;
     showFooter = false;
 
-    draftValues =[];
     @track wiredAccontList = [];
-    lastSavedData=[];
+    lastSavedData= [];
 
-    updateItem = [];
+    @track showModal = false;
+    @track record = {};
 
     @wire(getAccounts)
     wiredAccount(result) {
@@ -49,7 +50,11 @@ export default class StandardDataTable extends LightningElement {
 
     handleNameChange(event) {
         let updatedItem = { Id: event.target.dataset.id, Name: event.target.value };
-        console.log('updatedItem:', updatedItem);
+        this.updateDataValues(updatedItem);
+        this.showFooter = true;
+    }
+    handleRatingChange(event) {
+        let updatedItem = { Id: event.target.id.slice(0,18), Rating: event.target.value };
         this.updateDataValues(updatedItem);
         this.showFooter = true;
     }
@@ -59,12 +64,14 @@ export default class StandardDataTable extends LightningElement {
     }
     inlineEditingRatingHandler(event) {
         this.isRatingEdited = true;
+        
     }
     onCancel(event) {
         event.preventDefault();
         this.records = JSON.parse(JSON.stringify(this.lastSavedData));
         this.showFooter = false;
         this.isNameEdited = false;
+        this.isRatingEdited = false;
     }
     onSave(event) {
         saveAccountsLwc({records : this.records})
@@ -73,12 +80,13 @@ export default class StandardDataTable extends LightningElement {
             this.dispatchEvent(
                 new ShowToastEvent({
                     title : 'Success',
-                    message : `Records saved succesfully!`,
+                    message : `Record saved succesfully!`,
                     variant : 'success',
                 }),
             )
             return refreshApex(this.wiredAccontList).then(() => {
                         this.isNameEdited = false;
+                        this.isRatingEdited = false;
                         this.showFooter = false;
                     }); 
         })
@@ -93,4 +101,17 @@ export default class StandardDataTable extends LightningElement {
         })
     }
     
+    closeModal() {
+        this.showModal = false;
+    }
+    refreshApex() {
+        refreshApex(this.wiredAccontList);
+    }
+    deleteRecHandler(event) {
+        this.record = event.detail.row.Id;
+        console.log('rowID:', this.record)
+        this.showModal = true;
+    }
+    
 }
+// https://cunning-narwhal-3nlsvm-dev-ed.my.salesforce.com

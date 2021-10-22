@@ -20,4 +20,5 @@ public with sharing class dynamicRowsController {
             upsert accs;
         }
     }
+    
 }
