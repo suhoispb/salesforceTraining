@@ -100,35 +100,6 @@ export default class StandardDataTable extends LightningElement {
             );
         })
     }
-    // deleteRecHandler(event) {
-    //     const recId = event.currentTarget.dataset.id;
-    //     console.log('recID:', recId)
-                
-    //     deleteAccounts({toDeleteId : recId})
-    //     .then(() => {
-    //         this.dispatchEvent(
-    //             new ShowToastEvent({
-    //                 title : 'Success',
-    //                 message : `Record deleted succesfully!`,
-    //                 variant : 'success',
-    //             }),
-    //         )
-    //         return refreshApex(this.wiredAccontList).then(() => {console.log('success deleting')})
-    //     })
-    //     .catch(error => {
-    //         this.dispatchEvent(
-    //             new ShowToastEvent({
-    //                 title: 'Error deleting record',
-    //                 message: error.body.message,
-    //                 variant: 'error'
-    //             })
-    //         );
-    //         console.log('error deleting',error.body)
-    //     })
-    // }
-    // deleteRecHandler(event) {
-
-    // }
     closeModal() {
         this.showModal = false;
     }
